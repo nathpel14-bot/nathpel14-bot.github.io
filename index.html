@@ -3,34 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solveur de Calculs - Étape par Étape</title>
+    <title>MathsTools - Solveur de Mathématiques</title>
     <style>
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         body {
             background-color: #0f172a;
             color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- BARRE DE NAVIGATION (MENU PRINCIPAL) --- */
+        header {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffffff;
+            background-color: #0284c7;
+        }
+
+        /* --- CONTENU PRINCIPAL --- */
+        main {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
         }
+        .page-section {
+            display: none;
+            width: 100%;
+            max-width: 520px;
+        }
+        .page-section.active {
+            display: block;
+        }
+
+        /* --- CARTE SOLVEUR --- */
         .container {
             background-color: #1e293b;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
         }
         h1 {
             color: #38bdf8;
-            margin-top: 0;
-            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-size: 1.7rem;
             text-align: center;
         }
         .option-box {
@@ -57,7 +121,7 @@
         }
         input[type="text"] {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             margin-bottom: 15px;
             border: 2px solid #334155;
             border-radius: 8px;
@@ -72,7 +136,7 @@
         }
         button {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background-color: #0284c7;
             color: white;
             border: none;
@@ -85,9 +149,11 @@
         button:hover {
             background-color: #0369a1;
         }
+
+        /* --- RÉSULTATS --- */
         .result-box {
             margin-top: 25px;
-            padding: 15px;
+            padding: 18px;
             background-color: #0f172a;
             border-radius: 8px;
             border-left: 4px solid #38bdf8;
@@ -97,13 +163,13 @@
             color: #64748b;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .step {
-            font-size: 1.2rem;
-            margin: 6px 0;
+            font-size: 1.25rem;
+            margin: 8px 0;
             color: #e2e8f0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
         }
         .final-result {
             color: #4ade80;
@@ -112,29 +178,79 @@
         .error {
             color: #f87171 !important;
         }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            border-top: 1px solid #1e293b;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Solveur de Mathématiques</h1>
+    <!-- MENU PRINCIPAL -->
+    <header>
+        <nav>
+            <a href="#" class="logo">📐 MathsTools</a>
+            <ul class="nav-links">
+                <li><a href="#" class="active" onclick="showPage('solveur', this)">Solveur Pas-à-Pas</a></li>
+                <li><a href="#" onclick="showPage('apropos', this)">À propos</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Option en haut pour activer/désactiver le détail des étapes -->
-    <div class="option-box">
-        <label for="showSteps">Afficher le calcul étape par étape</label>
-        <input type="checkbox" id="showSteps" checked onchange="resoudre()">
-    </div>
+    <!-- CONTENU -->
+    <main>
+        <!-- SECTION 1: SOLVEUR PAS À PAS -->
+        <section id="solveur" class="page-section active">
+            <div class="container">
+                <h1>Solveur de Mathématiques</h1>
 
-    <input type="text" id="expression" placeholder="Ex: 150 - (28 - (17 - 13))" value="150 - (28 - (17 - 13))">
-    <button onclick="resoudre()">Calculer</button>
+                <div class="option-box">
+                    <label for="showSteps">Afficher le calcul étape par étape</label>
+                    <input type="checkbox" id="showSteps" checked onchange="resoudre()">
+                </div>
 
-    <div class="result-box">
-        <div class="result-title">Résolution</div>
-        <div id="resultat"></div>
-    </div>
-</div>
+                <input type="text" id="expression" placeholder="Ex: (84+16)÷(11-3)" value="(84+16)÷(11-3)">
+                <button onclick="resoudre()">Calculer</button>
+
+                <div class="result-box">
+                    <div class="result-title">Résolution</div>
+                    <div id="resultat"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: À PROPOS -->
+        <section id="apropos" class="page-section">
+            <div class="container" style="text-align: center;">
+                <h1>À propos de MathsTools</h1>
+                <p style="color: #94a3b8; line-height: 1.6; margin-top: 15px;">
+                    Cet outil a été conçu pour résoudre facilement des calculs mathématiques complexes avec parenthèses, crochets et priorités d'opérations.<br><br>
+                    Il prend en charge les symboles usuels : <code>+</code>, <code>-</code>, <code>×</code> ou <code>x</code>, <code>÷</code> ou <code>:</code>.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 - Site hébergé sur GitHub Pages par nathpel14-bot
+    </footer>
 
 <script>
+    // NAVIGATION DYNAMIQUE
+    function showPage(pageId, linkElement) {
+        document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        
+        document.getElementById(pageId).classList.add('active');
+        if (linkElement) linkElement.classList.add('active');
+    }
+
+    // MOTEUR DE CALCUL
     function resoudre() {
         let input = document.getElementById('expression').value;
         let resDiv = document.getElementById('resultat');
@@ -145,27 +261,26 @@
             return;
         }
 
-        // Nettoyage de l'expression (remplacement des symboles usuels)
+        // Conversion des symboles pour la syntaxe JS
         let expr = input
+            .replace(/÷/g, '/')
+            .replace(/×/g, '*')
             .replace(/x/gi, '*')
             .replace(/:/g, '/')
             .replace(/\[/g, '(')             .replace(/\]/g, ')');
 
         try {
             if (!showSteps) {
-                // Affichage direct sans les étapes
                 let res = Function('"use strict"; return (' + expr + ')')();
                 resDiv.innerHTML = `<div class="step final-result">= ${res}</div>`;
                 return;
             }
 
-            // Calcul étape par étape en résolvant d'abord les parenthèses les plus internes
             let steps = [input];
             let currentExpr = expr;
-            let maxSafety = 20; // Évite les boucles infinies
+            let maxSafety = 20;
 
             while (maxSafety > 0) {
-                // 1. Chercher les parenthèses les plus profondes (sans sous-parenthèses)
                 let innerParen = /\(([^()]+)\)/.exec(currentExpr);
                 
                 if (innerParen) {
@@ -173,13 +288,14 @@
                     let subRes = Function('"use strict"; return (' + subExpr + ')')();
                     currentExpr = currentExpr.replace(innerParen[0], subRes);
                     
-                    // Formater l'expression lisible pour l'affichage
-                    let displayExpr = currentExpr.replace(/\*/g, ' x ').replace(/\//g, ' : ');
+                    let displayExpr = currentExpr
+                        .replace(/\*/g, ' × ')
+                        .replace(/\//g, ' ÷ ');
+                    
                     if (!steps.includes(displayExpr)) {
                         steps.push(displayExpr);
                     }
                 } else {
-                    // S'il n'y a plus de parenthèses, résoudre la totalité
                     let finalRes = Function('"use strict"; return (' + currentExpr + ')')();
                     let displayFinal = "= " + finalRes;
                     if (steps[steps.length - 1] !== displayFinal) {
@@ -190,18 +306,17 @@
                 maxSafety--;
             }
 
-            // Générer l'affichage HTML des étapes
             let html = '';
             steps.forEach((step, index) => {
                 let isLast = index === steps.length - 1;
-                let prefix = index === 0 ? '' : '= ';
+                let prefix = (index === 0) ? '' : '= ';
                 html += `<div class="step ${isLast ? 'final-result' : ''}">${prefix}${step}</div>`;
             });
 
             resDiv.innerHTML = html;
 
         } catch (e) {
-            resDiv.innerHTML = '<span class="error">Erreur dans la formule (vérifiez les parenthèses)</span>';
+            resDiv.innerHTML = '<span class="error">Erreur dans la formule (vérifiez la syntaxe)</span>';
         }
     }
 
@@ -211,3 +326,4 @@
 
 </body>
 </html>
+.
