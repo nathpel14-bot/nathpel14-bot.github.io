@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathsTools - Solveur de Mathématiques</title>
+    <title>Portail des Sites & Outils</title>
     <style>
         * {
             box-sizing: border-box;
@@ -45,6 +45,7 @@
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            cursor: pointer;
         }
         .nav-links {
             display: flex;
@@ -60,6 +61,7 @@
             font-size: 0.95rem;
             font-weight: 500;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
         .nav-links a:hover, .nav-links a.active {
             color: #ffffff;
@@ -71,25 +73,29 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 40px 20px;
         }
         .page-section {
             display: none;
             width: 100%;
-            max-width: 520px;
+            max-width: 900px;
         }
         .page-section.active {
             display: block;
         }
 
-        /* --- CARTE SOLVEUR --- */
+        /* --- CONTENEURS / CARTES --- */
         .container {
             background-color: #1e293b;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             border: 1px solid #334155;
+            margin: 0 auto;
+        }
+        .small-container {
+            max-width: 520px;
         }
         h1 {
             color: #38bdf8;
@@ -97,6 +103,84 @@
             font-size: 1.7rem;
             text-align: center;
         }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-top: -10px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        /* --- BOUTON DE RETOUR --- */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .btn-back:hover {
+            color: #7dd3fc;
+        }
+
+        /* --- GRILLE DES SITES (PORTAIL PRINCIPAL) --- */
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .site-card {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .site-card:hover {
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+        }
+        .site-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .site-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .site-desc {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .btn-link {
+            display: inline-block;
+            text-align: center;
+            background-color: #0284c7;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .btn-link:hover {
+            background-color: #0369a1;
+        }
+
+        /* --- FORMULAIRE CALCULATRICE / SOLVEUR --- */
         .option-box {
             background-color: #0f172a;
             padding: 12px 16px;
@@ -134,7 +218,7 @@
         input[type="text"]:focus {
             border-color: #38bdf8;
         }
-        button {
+        .btn-calc {
             width: 100%;
             padding: 13px;
             background-color: #0284c7;
@@ -146,11 +230,11 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        button:hover {
+        .btn-calc:hover {
             background-color: #0369a1;
         }
 
-        /* --- RÉSULTATS --- */
+        /* --- RÉSULTATS CALCULATRICE --- */
         .result-box {
             margin-top: 25px;
             padding: 18px;
@@ -194,20 +278,73 @@
     <!-- MENU PRINCIPAL -->
     <header>
         <nav>
-            <a href="#" class="logo">📐 MathsTools</a>
+            <div class="logo" onclick="showPage('portail', document.querySelector('.nav-links a'))">🌐 Mon Portail</div>
             <ul class="nav-links">
-                <li><a href="#" class="active" onclick="showPage('solveur', this)">Solveur Pas-à-Pas</a></li>
+                <li><a href="#" class="active" onclick="showPage('portail', this)">Accueil / Portail</a></li>
+                <li><a href="#" onclick="showPage('solveur', this)">Calculatrice</a></li>
                 <li><a href="#" onclick="showPage('apropos', this)">À propos</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- CONTENU -->
+    <!-- CONTENU PRINCIPAL -->
     <main>
-        <!-- SECTION 1: SOLVEUR PAS À PAS -->
-        <section id="solveur" class="page-section active">
+
+        <!-- PAGE PRINCIPALE : PORTAIL DES SITES -->
+        <section id="portail" class="page-section active">
             <div class="container">
-                <h1>Solveur de Mathématiques</h1>
+                <h1>Portail des Sites & Applications</h1>
+                <p class="subtitle">Choisis une application ci-dessous pour y accéder</p>
+
+                <div class="sites-grid">
+                    <!-- Carte 1: Calculatrice / Solveur -->
+                    <div class="site-card">
+                        <div>
+                            <div class="site-icon">🧮</div>
+                            <div class="site-title">Calculatrice Pas-à-Pas</div>
+                            <div class="site-desc">Résolution étape par étape de vos calculs et expressions mathématiques.</div>
+                        </div>
+                        <a href="#" class="btn-link" onclick="showPage('solveur', document.querySelectorAll('.nav-links a')[1])">Ouvrir la sous-page</a>
+                    </div>
+
+                    <!-- Carte 2: Serveur Minecraft -->
+                    <div class="site-card">
+                        <div>
+                            <div class="site-icon">⛏️</div>
+                            <div class="site-title">Portail Minecraft</div>
+                            <div class="site-desc">Statut du serveur, actualités, plugins et informations sur la communauté.</div>
+                        </div>
+                        <a href="https://nathpel14-bot.github.io/" target="_blank" class="btn-link">Accéder au site</a>
+                    </div>
+
+                    <!-- Carte 3: Application Restaurant -->
+                    <div class="site-card">
+                        <div>
+                            <div class="site-icon">🍔</div>
+                            <div class="site-title">Menu & Commandes</div>
+                            <div class="site-desc">Application interactive de prise de commande et suivi du menu.</div>
+                        </div>
+                        <a href="https://nathpel14-bot.github.io/" target="_blank" class="btn-link">Accéder au site</a>
+                    </div>
+
+                    <!-- Carte 4: GitHub -->
+                    <div class="site-card">
+                        <div>
+                            <div class="site-icon">💻</div>
+                            <div class="site-title">Dépôts GitHub</div>
+                            <div class="site-desc">Retrouve le code source de tous les projets du bot et des applications.</div>
+                        </div>
+                        <a href="https://github.com/nathpel14-bot" target="_blank" class="btn-link">Voir sur GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOUS-PAGE : CALCULATRICE / SOLVEUR -->
+        <section id="solveur" class="page-section">
+            <div class="container small-container">
+                <a class="btn-back" onclick="showPage('portail', document.querySelectorAll('.nav-links a')[0])">← Retour au Portail</a>
+                <h1>Calculatrice Pas-à-Pas</h1>
 
                 <div class="option-box">
                     <label for="showSteps">Afficher le calcul étape par étape</label>
@@ -215,7 +352,7 @@
                 </div>
 
                 <input type="text" id="expression" placeholder="Ex: (84+16)÷(11-3)" value="(84+16)÷(11-3)">
-                <button onclick="resoudre()">Calculer</button>
+                <button class="btn-calc" onclick="resoudre()">Calculer</button>
 
                 <div class="result-box">
                     <div class="result-title">Résolution</div>
@@ -224,30 +361,40 @@
             </div>
         </section>
 
-        <!-- SECTION 2: À PROPOS -->
+        <!-- SOUS-PAGE : À PROPOS -->
         <section id="apropos" class="page-section">
-            <div class="container" style="text-align: center;">
-                <h1>À propos de MathsTools</h1>
-                <p style="color: #94a3b8; line-height: 1.6; margin-top: 15px;">
-                    Cet outil est pour Saint Felix Kerlois et a été conçu pour résoudre facilement des calculs mathématiques complexes avec parenthèses, crochets et priorités d'opérations.<br><br>
-                    Il prend en charge les symboles usuels : <code>+</code>, <code>-</code>, <code>×</code> ou <code>x</code>, <code>÷</code> ou <code>:</code>.
+            <div class="container small-container">
+                <a class="btn-back" onclick="showPage('portail', document.querySelectorAll('.nav-links a')[0])">← Retour au Portail</a>
+                <h1 style="text-align: center;">À propos</h1>
+                <p style="color: #94a3b8; line-height: 1.6; margin-top: 15px; text-align: center;">
+                    Ce portail regroupe l'ensemble de tes projets web et inclut une sous-page calculatrice pour détailler les étapes des priorités opératoires.<br><br>
+                    Hébergé avec ❤️ sur <strong>GitHub Pages</strong>.
                 </p>
             </div>
         </section>
+
     </main>
 
     <footer>
-        &copy; 2026 - Site hébergé sur GitHub Pages par nathpel14-bot
+        &copy; 2026 - Portail hébergé sur GitHub Pages par nathpel14-bot
     </footer>
 
 <script>
-    // NAVIGATION DYNAMIQUE
+    // GESTION DES SOUS-PAGES
     function showPage(pageId, linkElement) {
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
         document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
         
         document.getElementById(pageId).classList.add('active');
-        if (linkElement) linkElement.classList.add('active');
+        
+        if (linkElement) {
+            linkElement.classList.add('active');
+        } else {
+            if (pageId === 'portail') document.querySelectorAll('.nav-links a')[0].classList.add('active');
+            if (pageId === 'solveur') document.querySelectorAll('.nav-links a')[1].classList.add('active');
+            if (pageId === 'apropos') document.querySelectorAll('.nav-links a')[2].classList.add('active');
+        }
+        window.scrollTo(0, 0);
     }
 
     // MOTEUR DE CALCUL
@@ -261,7 +408,6 @@
             return;
         }
 
-        // Conversion des symboles pour la syntaxe JS
         let expr = input
             .replace(/÷/g, '/')
             .replace(/×/g, '*')
@@ -320,10 +466,9 @@
         }
     }
 
-    // Calcul automatique au chargement
+    // Initialisation
     resoudre();
 </script>
 
 </body>
 </html>
-.
